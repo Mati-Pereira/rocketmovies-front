@@ -27,6 +27,7 @@ export function SignUp() {
       alert("O usuário foi cadastrado com sucesso. Agora você pode se logar.");
       navigate("/");
     } catch (error) {
+      console.log(error);
       if (error.response) {
         alert(error.response.data.message);
       } else {
