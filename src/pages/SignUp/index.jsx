@@ -34,7 +34,6 @@ export function SignUp() {
         alert(
           "Não foi possível cadastrar o usuário. Por favor tente novamente mais tarde."
         );
-        console.log(error);
       }
     }
   }
