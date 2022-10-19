@@ -52,13 +52,9 @@ export function Details() {
   useEffect(() => {
     if (data.updated_at) {
       const initialFormat = data.updated_at;
-
       const [date, hour] = initialFormat.split(" ");
-
       const [year, month, day] = date.split("-");
-
       const [hours, minutes] = hour.split(":");
-
       setDateFormatted({
         date: `${day}/${month}/${year}`,
         hour: `${hours - 3}:${minutes}`,
@@ -85,7 +81,7 @@ export function Details() {
     }
 
     fetchData();
-  }, []);
+  }, [navigate, params.id]);
 
   return (
     <Container>
@@ -108,7 +104,7 @@ export function Details() {
                 <FiClock />
                 {dateFormatted && (
                   <p>
-                    {dateFormatted.date} ás {dateFormatted.hour}
+                    {dateFormatted.date} às {dateFormatted.hour}
                   </p>
                 )}
               </div>
