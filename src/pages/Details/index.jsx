@@ -81,7 +81,7 @@ export function Details() {
     }
 
     fetchData();
-  }, [navigate, params.id]);
+  }, []);
 
   return (
     <Container>
