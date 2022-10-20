@@ -15,6 +15,7 @@ import avatarPlaceholder from "../../assets/avatar_placeholder.svg";
 
 export function Details() {
   const [data, setData] = useState({});
+  const [tags, setTags] = useState([]);
   const [dateFormatted, setDateFormatted] = useState(null);
   const { userInfos } = useAuth();
   const avatar = userInfos.avatar
@@ -77,7 +78,7 @@ export function Details() {
 
       setDateFormatted({
         date: `${day}/${month}/${year}`,
-        hour: `${hours}:${minutes}`,
+        hour: `${Number(hours) - 3}:${minutes}`,
       });
     }
   }, [data]);
