@@ -1,6 +1,6 @@
 import { FiPlus, FiSearch } from "react-icons/fi";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { Container, Top, ButtonAdd, Notes } from "./styles";
 import { Header } from "../../components/Header";
@@ -14,9 +14,10 @@ export function Home() {
   const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
+  const params = useParams();
 
-  function handleShowDetails(id) {
-    navigate(`/details/${id}`);
+  function handleShowDetails() {
+    navigate(`/details/${params.id}`);
   }
 
   function handleMobileSearch() {
