@@ -14,10 +14,9 @@ export function Home() {
   const [search, setSearch] = useState("");
 
   const navigate = useNavigate();
-  const params = useParams();
 
-  function handleShowDetails() {
-    navigate(`/details/${params.id}`);
+  function handleShowDetails(id) {
+    navigate(`/details/${id}`);
   }
 
   function handleMobileSearch() {
@@ -82,7 +81,7 @@ export function Home() {
                 <Note
                   key={String(note.id)}
                   data={note}
-                  onClick={() => handleShowDetails()}
+                  onClick={() => handleShowDetails(note.id)}
                 />
               ))
             )}
