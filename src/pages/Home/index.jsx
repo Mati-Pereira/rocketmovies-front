@@ -82,7 +82,7 @@ export function Home() {
                 <Note
                   key={String(note.id)}
                   data={note}
-                  onClick={() => handleShowDetails(note.id)}
+                  onClick={() => handleShowDetails()}
                 />
               ))
             )}
