@@ -12,6 +12,7 @@ import { api } from "../../services/api";
 export function Home() {
   const [notes, setNotes] = useState([]);
   const [search, setSearch] = useState("");
+  const [tags, setTags] = useState("");
 
   const navigate = useNavigate();
 
@@ -30,7 +31,9 @@ export function Home() {
   useEffect(() => {
     async function fetchNotes() {
       try {
-        const response = await api.get(`/notes?title=${search}`);
+        const response = await api.get(
+          `/notes?title=${search}&tags=${tags}`
+        );
 
         setNotes(response.data);
       } catch (error) {
