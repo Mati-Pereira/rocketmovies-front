@@ -25,7 +25,7 @@ export const Container = styled.div`
       overflow-y: auto;
       padding: 0 2rem;
       .description {
-        padding-top: 4rem;
+        padding: 2rem 0;
       }
     }
 

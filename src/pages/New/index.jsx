@@ -77,7 +77,7 @@ export function New() {
 
     if (passedValidation) {
       try {
-        api.post("/notes/", { title, description, rating, tags });
+        api.post("/notes", { title, description, rating, tags });
         alert("Filme cadastrado com sucesso!");
         navigate("/");
       } catch (error) {
