@@ -16,9 +16,7 @@ import avatarPlaceholder from "../../assets/avatar_placeholder.svg";
 export function Details() {
   const [data, setData] = useState({});
   const [dateFormatted, setDateFormatted] = useState(null);
-
   const { userInfos } = useAuth();
-
   const avatar = userInfos.avatar
     ? `${api.defaults.baseURL}/files/${userInfos.avatar}`
     : avatarPlaceholder;
@@ -29,6 +27,26 @@ export function Details() {
   function handleEdit() {
     navigate(`/edit/${params.id}`);
   }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get(`/notes/${params.id}`);
+        setData(response.data);
+      } catch (error) {
+        if (error.response) {
+          alert(error.response.data.message);
+        } else {
+          alert(
+            "Não foi possível carregar  os dados deste filme. Tente novamente mais tarde."
+          );
+          navigate(-1);
+          console.log(error);
+        }
+      }
+    }
+
+    fetchData();
+  }, []);
 
   async function handleDelete() {
     const userConfirm = window.confirm("Tem certeza que deseja excluir?");
@@ -51,37 +69,18 @@ export function Details() {
 
   useEffect(() => {
     if (data.updated_at) {
+      console.log(data);
       const initialFormat = data.updated_at;
-      const [date, hour] = initialFormat.split(" ");
+      const [date, hour] = initialFormat.split("T");
       const [year, month, day] = date.split("-");
       const [hours, minutes] = hour.split(":");
+
       setDateFormatted({
         date: `${day}/${month}/${year}`,
-        hour: `${hours - 3}:${minutes}`,
+        hour: `${hours}:${minutes}`,
       });
     }
   }, [data]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await api.get(`/notes/${params.id}`);
-        setData(response.data[0]);
-      } catch (error) {
-        if (error.response) {
-          alert(error.response.data.message);
-        } else {
-          alert(
-            "Não foi possível carregar  os dados deste filme. Tente novamente mais tarde."
-          );
-          navigate(-1);
-          console.log(error);
-        }
-      }
-    }
-
-    fetchData();
-  }, []);
 
   return (
     <Container>

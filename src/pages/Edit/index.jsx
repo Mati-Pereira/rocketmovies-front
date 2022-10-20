@@ -23,25 +23,19 @@ export function Edit() {
 
   function inputValidator() {
     if (!title) {
-      alert("É necessário dar um título para cadastrar um filme.");
-      return false;
+      return alert("É necessário dar um título para cadastrar um filme.");
     }
-
     const isRatingValid = rating >= 0 && rating <= 5 && rating !== "";
-
     if (!isRatingValid) {
       alert("É necessário dar uma nota entre 0 e 5 para cadastrar um filme.");
       return false;
     }
-
     if (newTag) {
-      alert(
+      return alert(
         "Um marcador foi preenchido, mas não foi adicionado. Adicione-o, ou deixe o campo vazio."
       );
-      return false;
     }
-
-    return true;
+    return;
   }
 
   function handleBack() {
@@ -69,7 +63,6 @@ export function Edit() {
 
   function handleDeleteTag(deleted) {
     const tagsFiltered = tags.filter((tag) => tag !== deleted);
-
     setTags(tagsFiltered);
   }
 

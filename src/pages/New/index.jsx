@@ -79,7 +79,7 @@ export function New() {
       try {
         api.post("/notes", { title, description, rating, tags });
         alert("Filme cadastrado com sucesso!");
-        navigate(-1);
+        navigate("/");
       } catch (error) {
         if (error.response) {
           alert(error.response.data.message);
