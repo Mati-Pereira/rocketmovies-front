@@ -1,92 +1,63 @@
-import { FiPlus, FiSearch } from "react-icons/fi";
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FiPlus } from "react-icons/fi";
+import { Container, Content, NewMovie } from "./styles";
 
-import { Container, Top, ButtonAdd, Notes } from "./styles";
+import { api } from '../../services/api';
+
 import { Header } from "../../components/Header";
-import { Wrapper } from "../../components/Wrapper";
-import { Note } from "../../components/Note";
 import { Input } from "../../components/Input";
-import { api } from "../../services/api";
+import { Movie } from "../../components/Movie";
 
 export function Home() {
-  const [notes, setNotes] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("");
-  const [tags, setTags] = useState("");
 
   const navigate = useNavigate();
 
-  function handleShowDetails(id) {
+  function handleDetails(id) {
     navigate(`/details/${id}`);
   }
 
-  function handleMobileSearch() {
-    const mobileSearch = window.prompt("Digite sua busca:");
-
-    if (mobileSearch) {
-      setSearch(mobileSearch);
-    }
-  }
-
   useEffect(() => {
-    async function fetchNotes() {
-      try {
-        const response = await api.get(`/notes?title=${search}&tags=${tags}`);
-        setNotes(response.data);
-      } catch (error) {
-        if (error.response) {
-          alert(error.response.data.message);
-        } else {
-          alert(
-            "Não foi possível carregar os filmes. Tente recarregar a página."
-          );
-          console.log(error);
-        }
-      }
+    async function fetchMovies() {
+      const response = await api.get(`/notes?title=${search}`);
+      setMovies(response.data);
     }
 
-    fetchNotes();
+    fetchMovies();
   }, [search]);
 
   return (
     <Container>
       <Header>
-        <Input
-          className="search only-in-desktop"
+        <Input 
           placeholder="Pesquisar pelo título"
-          value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button
-          className="mobile-search"
-          type="button"
-          onClick={handleMobileSearch}
-        >
-          <FiSearch />
-        </button>
       </Header>
+
       <main>
-        <Wrapper>
-          <Top>
-            <h1>Meus filmes</h1>
-            <ButtonAdd to="/new">
-              <FiPlus /> Adicionar filme
-            </ButtonAdd>
-          </Top>
-          <Notes>
-            {notes.length == 0 ? (
-              <h2>Nenhum filme encontrado</h2>
-            ) : (
-              notes.map((note) => (
-                <Note
-                  key={String(note.id)}
-                  data={note}
-                  onClick={() => handleShowDetails(note.id)}
-                />
-              ))
-            )}
-          </Notes>
-        </Wrapper>
+        <header>
+          <h1>Meus filmes</h1>
+
+          <NewMovie to="/new">
+            <FiPlus />
+            Adicionar filme
+          </NewMovie>
+        </header>
+
+        <Content>
+          {
+            movies.map(movie => (
+              <Movie 
+                key={String(movie.id)}
+                data={movie} 
+                onClick={() => handleDetails(movie.id)}
+              />
+            ))
+          }
+        </Content>
       </main>
     </Container>
   );

@@ -1,44 +1,37 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Container, Brand, Search, Profile, Logout } from "./styles";
+import { useAuth } from '../../hooks/auth';
 
-import { Container, Profile, Logout } from "./styles";
-import { Wrapper } from "../Wrapper";
-import { useAuth } from "../../hooks/auth";
-import avatarPlaceholder from "../../assets/avatar_placeholder.svg";
-import { api } from "../../services/api";
+import { api } from '../../services/api';
+import avatarPlaceholder from '../../assets/avatar_placeholder.svg';
 
-export function Header({ children }) {
-  const { userInfos, signOut } = useAuth();
+export function Header({children}) {
+  const { signOut, user } = useAuth();
 
-  const navigate = useNavigate();
-
-  const avatar = userInfos.avatar
-    ? `${api.defaults.baseURL}/files/${userInfos.avatar}`
-    : avatarPlaceholder;
-
-  function handleSignOut() {
-    navigate("/");
-    signOut();
-  }
+  const avatarURL = user.avatar ? `${api.defaults.baseURL}/files/${user.avatar}` : avatarPlaceholder;
 
   return (
     <Container>
-      <Wrapper>
-        <Link to="/" className="only-in-desktop">
-          <h2>RocketMovies</h2>
-        </Link>
+      <Brand>
+        <h1>RocketMovies</h1>
+      </Brand>
+
+      <Search>
         {children}
-        <Profile>
-          <div>
-            <p>{userInfos.name}</p>
-            <Logout type="button" onClick={handleSignOut}>
-              Sair
-            </Logout>
-          </div>
-          <Link to="/profile">
-            <img src={avatar} alt={`Foto de ${userInfos.name}`} />
-          </Link>
-        </Profile>
-      </Wrapper>
+      </Search>
+
+      <Profile to="/profile">
+        <div>
+          <strong>{user.name}</strong>
+          <Logout onClick={signOut}>
+            sair
+          </Logout>
+        </div>
+
+        <img
+          src={avatarURL}
+          alt={user.name}
+        />
+      </Profile>
     </Container>
   );
 }

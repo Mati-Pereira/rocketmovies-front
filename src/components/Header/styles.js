@@ -1,109 +1,68 @@
 import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
 export const Container = styled.header`
   grid-area: header;
 
+  height: 116px;
   width: 100%;
-  /* height: 11.6rem; */
-  padding: 3rem 0;
-  border-bottom: 1px solid ${({ theme }) => theme.COLORS.GRAY_900};
 
-  position: relative;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: ${({ theme }) => theme.COLORS.BACKGROUND_700};
+  
+  display: flex;
+  justify-content: space-between;
+  
+  padding: 0 123px;
+`;
 
-  @media (max-width: 768px) {
-    padding: 1rem 0;
-  }
+export const Brand = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  > .wrapper {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6.4rem;
-
-    h2 {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: ${({ theme }) => theme.COLORS.PINK_800};
-
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-
-    .only-in-desktop {
-      @media (max-width: 768px) {
-        display: none;
-      }
-    }
-
-    > div:nth-child(2) {
-      margin-bottom: 0;
-    }
-
-    .mobile-search {
-      display: none;
-      background-color: transparent;
-      font-size: 2rem;
-      color: ${({ theme }) => theme.COLORS.PINK_800};
-
-      position: absolute;
-      left: 2rem;
-
-      @media (max-width: 768px) {
-        display: block;
-      }
-    }
+  > h1 {
+    font-size: 24px;
+    color: ${({ theme }) => theme.COLORS.PINK};
   }
 `;
 
-export const Profile = styled.div`
-  max-width: 20rem;
-
+export const Search = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.9rem;
+  padding: 0 64px;
+  flex-grow: 1;
+`;
 
-  @media (max-width: 768px) {
-    position: absolute;
-    right: 2rem;
+export const Profile = styled(Link)`
+  display: flex;
+  align-items: center;
+
+  > img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
   }
 
   > div {
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
 
-    p {
-      font-size: 1.4rem;
-      font-weight: 700;
+    margin-right: 9px;
+    font-size: 14px;
+    line-height: 18px;
 
-      max-width: 15rem;
-      word-wrap: normal;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-
-  img {
-    width: 6.4rem;
-    height: 6.4rem;
-
-    border-radius: 50%;
-    border: 1px solid ${({ theme }) => theme.COLORS.GRAY_900};
-
-    @media (max-width: 768px) {
-      width: 5rem;
-      height: 5rem;
+    strong {
+      color: ${({ theme }) => theme.COLORS.WHITE};
     }
   }
 `;
 
 export const Logout = styled.button`
-  display: block;
-  width: 100%;
-
   border: none;
-  background-color: transparent;
-
-  text-align: right;
+  background: none;
+  
+  color: ${({ theme }) => theme.COLORS.GRAY_200};
 `;

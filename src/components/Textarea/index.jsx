@@ -1,10 +1,9 @@
 import { Container } from "./styles";
 
-export function ButtonText({ icon: Icon, title, ...rest }) {
+export function Textarea({ value, ...rest }) {
   return (
     <Container {...rest}>
-      {Icon && <Icon />}
-      {title}
+      {value}
     </Container>
   );
 }

@@ -1,63 +1,48 @@
 import styled from "styled-components";
-
-import bgImg from "../../assets/background.jpg";
+import backgroundImg from "../../assets/background.png";
 
 export const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
+  height: 100vh;
 
   display: flex;
   align-items: stretch;
-`;
-
-export const Content = styled.div`
-  width: 100%;
-  max-width: 64rem;
 `;
 
 export const Form = styled.form`
-  width: 100%;
-  max-width: 41rem;
-  padding: 8rem 4rem;
-  margin: auto;
+  padding: 0 161px 0 136px;
 
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-
-  text-align: center;
+  justify-content: center;
 
   > h1 {
-    font-size: 4.8rem;
-    font-weight: 700;
-    color: ${({ theme }) => theme.COLORS.PINK_800};
-
-    @media (max-width: 425px) {
-      font-size: 10vw;
-    }
-  }
-
-  > p {
-    font-size: 1.4rem;
-    color: ${({ theme }) => theme.COLORS.WHITE_900};
+    font-size: 48px;
+    color: ${({ theme }) => theme.COLORS.PINK};
   }
 
   > h2 {
-    font-size: 2.4rem;
-    font-weight: 500;
-    color: ${({ theme }) => theme.COLORS.WHITE_800};
-
-    margin: 4.8rem 0;
+    font-size: 24px;
+    margin: 48px 0;
   }
 
-  > a:last-child {
-    margin-top: 4rem;
-    align-self: center;
+  > p {
+    font-size: 14px;
+    color: ${({ theme }) => theme.COLORS.GRAY_100};
+  }
+
+  > a {
+    margin-top: 42px;
+    color: ${({ theme }) => theme.COLORS.PINK};
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
   }
 `;
 
-export const BackgroundImg = styled.div`
-  flex-grow: 1;
-  background: url(${bgImg}) no-repeat center center;
+export const Background = styled.div`
+  flex: 1;
+  background: url(${backgroundImg}) no-repeat center center;
   background-size: cover;
 `;

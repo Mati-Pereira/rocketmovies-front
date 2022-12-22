@@ -1,51 +1,68 @@
+import { useState } from 'react';
 import { FiArrowLeft } from "react-icons/fi";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { Container, Inputs, TextArea, Buttons } from "./styles";
-import { Header } from "../../components/Header";
-import { Wrapper } from "../../components/Wrapper";
-import { ButtonText } from "../../components/ButtonText";
-import { Input } from "../../components/Input";
+import { useNavigate } from 'react-router-dom';
+
+import { Textarea } from "../../components/Textarea";
+import { MovieItem } from "../../components/MovieItem";
+import { Section } from "../../components/Section";
 import { Button } from "../../components/Button";
-import { NoteItem } from "../../components/NoteItem";
-import { api } from "../../services/api";
+import { Header } from "../../components/Header";
+import { Input } from "../../components/Input";
+
+import { api } from '../../services/api';
+
+import { Container, Form } from "./styles";
 
 export function New() {
   const [title, setTitle] = useState("");
   const [rating, setRating] = useState("");
-  const [description, setDescription] = useState("");
+	const [description, setDescription] = useState("");
+
   const [tags, setTags] = useState([]);
-  const [newTag, setNewTag] = useState("");
+	const [newTag, setNewTag] = useState("");
 
   const navigate = useNavigate();
 
-  function inputValidator() {
-    if (!title) {
-      alert("É necessário dar um título para cadastrar um filme.");
-      return false;
-    }
+  function handleAddTag() {
+		setTags(prevState => [...prevState, newTag])
+		setNewTag("");
+	}
 
-    const isRatingValid = rating >= 0 && rating <= 5 && rating !== "";
+  function handleRemoveTag(deleted) {
+		setTags(prevState => prevState.filter(tag => tag !== deleted));
+	}
+
+  async function handleNewMovie() {
+    if (!title) {
+			return alert("Digite o título do filme");
+		}
+    
+    const isRatingValid = rating >= 0 && rating <= 5;
 
     if (!isRatingValid) {
-      alert("É necessário dar uma nota entre 0 e 5 para cadastrar um filme.");
-      return false;
+      return alert("A nota do filme deve ser entre 0 e 5");
     }
+    
+		if (newTag) {
+			return alert("Você deixou uma tag no campo para adicionar, mas não clicou em adicionar. Clique para adicionar ou deixe o campo vazio.");
+		}
 
-    if (newTag) {
-      alert(
-        "Um marcador foi preenchido, mas não foi adicionado. Adicione-o, ou deixe o campo vazio."
-      );
-      return false;
-    }
+		await api.post("/notes", {
+			title,
+			description,
+      rating,
+			tags
+		});
 
-    return true;
-  }
+		alert("Filme adicionado com sucesso!");
+		navigate("/");
+	}
 
-  function handleBack() {
+  function handleDiscardMovie() {
     const userConfirmation = confirm(
-      "Todas as mudanças serão perdidas...Tem certeza que deseja descartar as alterações?"
+      "Todas as alterações serão perdidas... Tem certeza que deseja descartar as alterações?"
     );
 
     if (userConfirmation) {
@@ -53,96 +70,80 @@ export function New() {
     }
   }
 
-  function handleAddNewTag() {
-    const tagAlreadyAdded = tags.includes(newTag);
-
-    if (tagAlreadyAdded) {
-      return alert("Este marcador já foi adicionado!");
-    }
-
-    if (newTag !== "") {
-      setTags((prevState) => [...prevState, newTag]);
-      setNewTag("");
-    }
-  }
-
-  function handleDeleteTag(deleted) {
-    const tagsFiltered = tags.filter((tag) => tag !== deleted);
-
-    setTags(tagsFiltered);
-  }
-
-  async function handleSave() {
-    const passedValidation = inputValidator();
-
-    if (passedValidation) {
-      try {
-        api.post("/notes", { title, description, rating, tags });
-        alert("Filme cadastrado com sucesso!");
-        navigate("/");
-      } catch (error) {
-        if (error.response) {
-          alert(error.response.data.message);
-        } else {
-          alert("Não foi possível cadastrar o filme");
-          console.log(error);
-        }
-      }
-    }
-  }
-
   return (
     <Container>
-      <Header />
+      <Header>
+        <Input 
+          placeholder="Pesquisar pelo título"
+        />
+      </Header>
+
       <main>
-        <Wrapper>
-          <ButtonText to="/" icon={FiArrowLeft} title="Voltar" />
-          <h1>Novo filme</h1>
-          <Inputs>
-            <Input
-              placeholder="Título"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+        <Form>
+          <header>
+            <Link to="/">
+              <FiArrowLeft />
+              Voltar
+            </Link>
+
+            <h1>Novo filme</h1>
+          </header>
+
+          <div>
+            <Input 
+              placeholder="Título" 
+              onChange={e => setTitle(e.target.value)}
             />
-            <Input
-              placeholder="Sua nota (de 0 a 5)"
+
+            <Input 
+              placeholder="Sua nota (de 0 a 5)" 
               type="number"
               min="0"
               max="5"
               value={rating}
-              onChange={(e) => setRating(e.target.value)}
+              onChange={e => setRating(e.target.value)}
             />
-          </Inputs>
-          <TextArea
-            placeholder="Observações"
-            onChange={(e) => setDescription(e.target.value)}
-          />
-          <h2>Marcadores</h2>
-          <section className="note-items">
-            {tags.map((tag, index) => (
-              <NoteItem
-                key={`${tag}-${index}`}
-                onClick={() => handleDeleteTag(tag)}
-                value={tag}
-              />
-            ))}
-            <NoteItem
-              isNew
-              placeholder="Nova tag"
-              onClick={handleAddNewTag}
-              value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
+          </div>
+
+          <Textarea 
+						placeholder="Observações"
+						onChange={e => setDescription(e.target.value)} 
+					/>
+
+          <Section title="Marcadores">
+            <div className="tags">
+              {
+								tags.map((tag, index) => (
+									<MovieItem 
+										key={String(index)}
+										value={tag} 
+										onClick={() => handleRemoveTag(tag)}
+									/>
+								))
+							}
+
+							<MovieItem 
+								isNew 
+								placeholder="Novo marcador" 
+								onChange={e => setNewTag(e.target.value)}
+								value={newTag}
+								onClick={handleAddTag}
+							/>
+            </div>
+          </Section>
+
+          <div>
+            <Button 
+              title="Excluir filme" 
+              onClick={handleDiscardMovie}
             />
-          </section>
-          <Buttons>
-            <Button
-              title="Descartar alterações"
-              highlighted={false}
-              onClick={handleBack}
+
+            <Button 
+              title="Salvar alterações" 
+              onClick={handleNewMovie}
             />
-            <Button title="Salvar alterações" onClick={handleSave} />
-          </Buttons>
-        </Wrapper>
+          </div>
+        </Form>
       </main>
     </Container>
   );

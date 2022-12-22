@@ -12,8 +12,7 @@
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
     "react/self-closing-comp": "warn",
-    "import/no-unresolved": "off",
-    "no-unused-vars": "off"
+    "import/no-unresolved": "off"
   },
   "plugins": ["react", "import", "jsx-a11y"],
   "parserOptions": {

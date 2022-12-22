@@ -1,10 +1,10 @@
 import { Container } from "./styles";
 
-export function Input({ icon: Icon, type = "text", className, ...rest }) {
+export function Input({ icon: Icon, ...rest }) {
   return (
-    <Container className={className}>
-      {Icon && <Icon />}
-      <input type={type} {...rest} />
+    <Container>
+      {Icon && <Icon size={20} />}
+      <input {...rest} />
     </Container>
   );
 }

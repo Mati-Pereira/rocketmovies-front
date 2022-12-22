@@ -1,11 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 
-import { Home } from "../pages/Home";
 import { New } from "../pages/New";
-import { Profile } from "../pages/Profile";
+import { Home } from "../pages/Home";
 import { Details } from "../pages/Details";
-import { Edit } from "../pages/Edit";
-import { NotFound } from "../pages/NotFound";
+import { Profile } from "../pages/Profile";
 
 export function AppRoutes() {
   return (
@@ -14,8 +12,6 @@ export function AppRoutes() {
       <Route path="/new" element={<New />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/details/:id" element={<Details />} />
-      <Route path="/edit/:id" element={<Edit />} />
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
