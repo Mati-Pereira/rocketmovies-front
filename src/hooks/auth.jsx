@@ -1,35 +1,30 @@
 import { createContext, useContext, useState, useEffect } from "react";
-
 import { api } from "../services/api";
 
 const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
-  const [userInfos, setUserInfos] = useState(null);
-
-  async function signIn(email, password) {
+  const [data, setData] = useState({});
+  async function signIn({ email, password }) {
     try {
       const response = await api.post("/sessions", { email, password });
       const { user, token } = response.data;
-
-      setUserInfos(user);
+      localStorage.setItem("@rocketnotes:user", JSON.stringify(user));
+      localStorage.setItem("@rocketnotes:token", token);
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-      localStorage.setItem("@rocketmovies:user", JSON.stringify(user));
-      localStorage.setItem("@rocketmovies:token", token);
+      setData({ user, token });
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message);
       } else {
-        alert("Não foi possível logar. Por favor tente novamente mais tarde.");
+        alert("Signin Error");
       }
     }
   }
 
   function signOut() {
-    setUserInfos(null);
-    localStorage.removeItem("@rocketmovies:user");
-    localStorage.removeItem("@rocketmovies:token");
+    localStorage.clear();
+    setData({});
   }
 
   async function updateUser({ user, avatar }) {
@@ -37,22 +32,16 @@ function AuthProvider({ children }) {
       if (avatar) {
         const fileForm = new FormData();
         fileForm.append("avatar", avatar);
-
         const response = await api.patch("/users/avatar", fileForm);
-
-        setUserInfos(response.data);
-
+        setData(response.data);
         localStorage.setItem(
           "@rocketmovies:user",
           JSON.stringify(response.data)
         );
       }
       const response = await api.put("/users", user);
-
-      setUserInfos(response.data);
-
+      setData(response.data);
       localStorage.setItem("@rocketmovies:user", JSON.stringify(response.data));
-
       alert("Dados atualizados com sucesso");
     } catch (error) {
       if (error.response) {
@@ -70,22 +59,22 @@ function AuthProvider({ children }) {
     const token = localStorage.getItem("@rocketmovies:token");
 
     if (user && token) {
-      setUserInfos(user);
+      setData({ user: JSON.parse(user), token });
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }, []);
 
   return (
-    <AuthContext.Provider value={{ userInfos, signIn, signOut, updateUser }}>
+    <AuthContext.Provider
+      value={{ user: data.user, signIn, signOut, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
 function useAuth() {
-  const context = useContext(AuthContext);
-
-  return context;
+  return useContext(AuthContext);
 }
 
 export { AuthProvider, useAuth };
