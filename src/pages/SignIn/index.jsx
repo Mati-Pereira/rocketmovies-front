@@ -10,17 +10,15 @@ import { useAuth } from "../../hooks/auth";
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  console.log(`${email} ${password}`);
   const { signIn } = useAuth();
 
   function handleSignIn() {
     const someoneFieldWasNotFilled = !email || !password;
-
     if (someoneFieldWasNotFilled) {
-      return alert("Preencha todos os campos para entrar!");
+      alert("Preencha todos os campos para entrar!");
     }
-
-    signIn(email, password);
+    signIn({ email, password });
   }
 
   return (

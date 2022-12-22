@@ -1,16 +1,17 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "../services/api";
 
-const AuthContext = createContext({});
+export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
   const [data, setData] = useState({});
+
   async function signIn({ email, password }) {
     try {
       const response = await api.post("/sessions", { email, password });
       const { user, token } = response.data;
-      localStorage.setItem("@rocketnotes:user", JSON.stringify(user));
-      localStorage.setItem("@rocketnotes:token", token);
+      localStorage.setItem("@rocketmovies:user", JSON.stringify(user));
+      localStorage.setItem("@rocketmovies:token", token);
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setData({ user, token });
     } catch (error) {
@@ -22,27 +23,23 @@ function AuthProvider({ children }) {
     }
   }
 
-  function signOut() {
+  function logOut() {
     localStorage.clear();
     setData({});
   }
 
-  async function updateUser({ user, avatar }) {
+  async function updateProfile({ user, avatarFile }) {
     try {
-      if (avatar) {
-        const fileForm = new FormData();
-        fileForm.append("avatar", avatar);
-        const response = await api.patch("/users/avatar", fileForm);
-        setData(response.data);
-        localStorage.setItem(
-          "@rocketmovies:user",
-          JSON.stringify(response.data)
-        );
+      if (avatarFile) {
+        const fileUploadForm = new FormData();
+        fileUploadForm.append("avatar", avatarFile);
+        const response = await api.patch("/users/avatar", fileUploadForm);
+        user.avatar = response.data.avatar;
       }
-      const response = await api.put("/users", user);
-      setData(response.data);
-      localStorage.setItem("@rocketmovies:user", JSON.stringify(response.data));
-      alert("Dados atualizados com sucesso");
+      await api.put("/users", user);
+      localStorage.setItem("@rocketmovies:user", JSON.stringify(user));
+      setData({ user, token: data.token });
+      alert("Perfil Atualizado");
     } catch (error) {
       if (error.response) {
         alert(error.response.data.message);
@@ -55,18 +52,23 @@ function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("@rocketmovies:user"));
+    const user = localStorage.getItem("@rocketmovies:user");
     const token = localStorage.getItem("@rocketmovies:token");
 
     if (user && token) {
-      setData({ user: JSON.parse(user), token });
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      setData({ user: JSON.parse(user), token });
     }
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ user: data.user, signIn, signOut, updateUser }}
+      value={{
+        signIn,
+        logOut,
+        user: data.user,
+        updateProfile,
+      }}
     >
       {children}
     </AuthContext.Provider>
