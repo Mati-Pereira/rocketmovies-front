@@ -19,12 +19,12 @@ export function Header({ children }) {
 
       <Search>{children}</Search>
 
-      <Profile to="/profile">
-        <div>
-          <strong>{user.name}</strong>
-          <Logout onClick={signOut}>sair</Logout>
-        </div>
+      <div>
+        <strong>{user.name}</strong>
+        <Logout onClick={signOut}>sair</Logout>
+      </div>
 
+      <Profile to="/profile">
         <img src={avatarURL} alt={user.name} />
       </Profile>
     </Container>
