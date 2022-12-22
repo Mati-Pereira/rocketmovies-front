@@ -27,7 +27,7 @@ export function SignIn() {
     });
     setTimeout(() => {
       setIsLoading(false);
-    }, 10000);
+    }, 100000);
   };
 
   return (

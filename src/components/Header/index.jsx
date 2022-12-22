@@ -1,5 +1,6 @@
 import { Container, Brand, Search, Profile, Logout } from "./styles";
 import { useAuth } from "../../hooks/auth";
+import { Link } from "react-router-dom";
 
 import { api } from "../../services/api";
 import avatarPlaceholder from "../../assets/avatar_placeholder.svg";
@@ -19,13 +20,14 @@ export function Header({ children }) {
 
       <Search>{children}</Search>
 
-      <div>
-        <strong>{user.name}</strong>
-        <Logout onClick={signOut}>sair</Logout>
-      </div>
-
-      <Profile to="/profile">
-        <img src={avatarURL} alt={user.name} />
+      <Profile>
+        <div>
+          <strong>{user.name}</strong>
+          <Logout onClick={signOut}>sair</Logout>
+        </div>
+        <Link to="/profile">
+          <img src={avatarURL} alt={user.name} />
+        </Link>
       </Profile>
     </Container>
   );
