@@ -8,4 +8,4 @@ function Button({ children, ...rest }) {
   );
 }
 
-export default Button;
+export { Button };
