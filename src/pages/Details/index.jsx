@@ -12,9 +12,7 @@ export function Details({ data, ...rest }) {
   return (
     <Container {...rest}>
       <Header>
-        <Input 
-          placeholder="Pesquisar pelo título"
-        />
+        <Input placeholder="Pesquisar pelo título" />
       </Header>
 
       <main>

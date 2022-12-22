@@ -1,51 +1,86 @@
-import { useState } from 'react';
+import { useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { Link } from "react-router-dom";
-
-import { useAuth } from '../../hooks/auth';
-
+import { useAuth } from "../../hooks/auth";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
-
 import { Container, Form, Background } from "./styles";
+import { LineWobble } from "@uiball/loaders";
+import { Controller, useForm } from "react-hook-form";
 
 export function SignIn() {
-  const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-	const { signIn } = useAuth();
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const { signIn } = useAuth();
 
-	function handleSignIn() {
-		signIn({ email, password });
-	}
+  const onSubmit = ({ email, password }) => {
+    setIsLoading(true);
+    signIn({
+      email,
+      password,
+    });
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 10000);
+  };
 
   return (
     <Container>
-      <Form>
-        <h1>RocketMovies</h1>
-        <p>Aplicação para acompanhar tudo que assistir.</p>
-
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <h1>Rocket Notes</h1>
+        <p>Aplicação para salvar e gerenciar seus links úteis</p>
         <h2>Faça seu login</h2>
-
-        <Input 
-          placeholder="E-mail" 
-          type="text" 
-          icon={FiMail} 
-          onChange={e => setEmail(e.target.value)}
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="Email"
+              type="text"
+              icon={FiMail}
+              onChange={onChange}
+              value={value}
+              required
+            />
+          )}
+          name="email"
         />
-
-        <Input 
-          placeholder="Senha" 
-          type="password" 
-          icon={FiLock} 
-          onChange={e => setPassword(e.target.value)}
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, value } }) => (
+            <Input
+              placeholder="Password"
+              type="password"
+              icon={FiLock}
+              onChange={onChange}
+              value={value}
+              required
+            />
+          )}
+          name="password"
         />
+        <Button type="submit">
+          {isLoading ? (
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <LineWobble size={30} lineWeight={5} speed={2} color="black" />
+            </div>
+          ) : (
+            "Entrar"
+          )}
+        </Button>
 
-        <Button title="Entrar" onClick={handleSignIn} />
-
-        <Link to="/register">
-          Criar conta
-        </Link>
+        <Link to="/register">Criar conta</Link>
       </Form>
 
       <Background />
