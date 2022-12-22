@@ -1,6 +1,6 @@
 import { Container, Form, Background } from "./styles";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
+import { Input } from "../../components/Input";
+import { Button } from "../../components/Button";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import { useState } from "react";
