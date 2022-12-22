@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 import { api } from "../services/api";
+import { toast } from "react-toastify";
 
 export const AuthContext = createContext({});
 
@@ -19,21 +20,18 @@ function AuthProvider({ children }) {
       if (avatarFile) {
         const fileUploadForm = new FormData();
         fileUploadForm.append("avatar", avatarFile);
-
         const response = await api.patch("/users/avatar", fileUploadForm);
         user.avatar = response.data.avatar;
       }
-
       await api.put("/users", user);
       localStorage.setItem("@rocketmovies:user", JSON.stringify(user));
-
       setData({ user, token: data.token });
-      alert("Perfil atualizado!");
+      toast.success("Perfil atualizado!");
     } catch (error) {
       if (error.response) {
-        alert(error.response.data.message);
+        toast.warning(error.response.data.message);
       } else {
-        alert("Não foi possível atualizar o perfil.");
+        toast.warning("Não foi possível atualizar o perfil.");
       }
     }
   }
@@ -50,9 +48,9 @@ function AuthProvider({ children }) {
       setData({ user, token });
     } catch (error) {
       if (error.response) {
-        alert(error.response.data.message);
+        toast.warning(error.response.data.message);
       } else {
-        alert("Não foi possível entrar.");
+        toast.warning("Não foi possível entrar.");
       }
     }
   }

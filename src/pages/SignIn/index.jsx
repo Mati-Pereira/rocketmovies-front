@@ -19,15 +19,13 @@ export function SignIn() {
   });
   const { signIn } = useAuth();
 
-  const onSubmit = ({ email, password }) => {
+  const onSubmit = async ({ email, password }) => {
     setIsLoading(true);
-    signIn({
+    await signIn({
       email,
       password,
     });
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 100000);
+    setIsLoading(false);
   };
 
   return (

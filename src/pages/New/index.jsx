@@ -14,6 +14,7 @@ import { Input } from "../../components/Input";
 import { api } from "../../services/api";
 
 import { Container, Form } from "./styles";
+import { toast } from "react-toastify";
 
 export function New() {
   const [title, setTitle] = useState("");
@@ -36,17 +37,17 @@ export function New() {
 
   async function handleNewMovie() {
     if (!title) {
-      return alert("Digite o título do filme");
+      return toast.warning("Digite o título do filme");
     }
 
     const isRatingValid = rating >= 0 && rating <= 5;
 
     if (!isRatingValid) {
-      return alert("A nota do filme deve ser entre 0 e 5");
+      return toast.warning("A nota do filme deve ser entre 0 e 5");
     }
 
     if (newTag) {
-      return alert(
+      return toast.warning(
         "Você deixou uma tag no campo para adicionar, mas não clicou em adicionar. Clique para adicionar ou deixe o campo vazio."
       );
     }
@@ -58,7 +59,7 @@ export function New() {
       tags,
     });
 
-    alert("Filme adicionado com sucesso!");
+    toast.success("Filme adicionado com sucesso!");
     navigate("/");
   }
 
